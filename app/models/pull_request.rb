@@ -1,5 +1,5 @@
 class PullRequest < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   has_one :comment, dependent: :destroy
 
   validates :link, presence: true

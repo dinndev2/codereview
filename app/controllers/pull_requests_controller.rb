@@ -11,7 +11,7 @@ class PullRequestsController < ApplicationController
 
   def create
     @pull_request = PullRequest.new(pull_request_params)
-    @pull_request.user = User.first
+    @pull_request.user = User.find_or_create_by(first_name: "Anonymous")
     if @pull_request.save
       CommentJob.perform_later(@pull_request)
       flash[:notice] = "Pull request is now being reviewed"
