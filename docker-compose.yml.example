@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      # REQUIRED: Set one of these
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-your-secret-key-here}
+      # OR use RAILS_MASTER_KEY instead:
+      # RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      
+      # Other environment variables
+      RAILS_ENV: production
+      RAILS_LOG_TO_STDOUT: "true"
+    volumes:
+      # IMPORTANT: Mount storage directory for SQLite database persistence
+      - ./storage:/rails/storage
+    # Uncomment if using PostgreSQL/MySQL instead of SQLite
+    # depends_on:
+    #   - db
+

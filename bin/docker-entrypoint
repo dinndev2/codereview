@@ -7,9 +7,26 @@ fi
 
 # Check for required secret_key_base in production
 if [ "${RAILS_ENV}" == "production" ] && [ -z "${SECRET_KEY_BASE}" ] && [ -z "${RAILS_MASTER_KEY}" ]; then
-  echo "ERROR: Missing SECRET_KEY_BASE or RAILS_MASTER_KEY for production environment" >&2
-  echo "Set SECRET_KEY_BASE: docker run -e SECRET_KEY_BASE=\$(bin/rails secret) ..." >&2
-  echo "Or set RAILS_MASTER_KEY: docker run -e RAILS_MASTER_KEY=<master-key> ..." >&2
+  echo "" >&2
+  echo "===========================================" >&2
+  echo "ERROR: Missing SECRET_KEY_BASE or RAILS_MASTER_KEY" >&2
+  echo "===========================================" >&2
+  echo "" >&2
+  echo "To fix this, set one of these environment variables:" >&2
+  echo "" >&2
+  echo "Option 1 - SECRET_KEY_BASE (recommended):" >&2
+  echo "  Generate: bin/rails secret" >&2
+  echo "  Then set in your deployment platform's environment variables" >&2
+  echo "" >&2
+  echo "Option 2 - RAILS_MASTER_KEY:" >&2
+  echo "  Use the value from config/master.key" >&2
+  echo "  Set in your deployment platform's environment variables" >&2
+  echo "" >&2
+  echo "For Docker:" >&2
+  echo "  docker run -e SECRET_KEY_BASE=\$(bin/rails secret) ..." >&2
+  echo "" >&2
+  echo "See DEPLOYMENT.md for platform-specific instructions." >&2
+  echo "" >&2
   exit 1
 fi
 
