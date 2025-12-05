@@ -5,6 +5,14 @@ if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
   export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
 fi
 
+# Check for required secret_key_base in production
+if [ "${RAILS_ENV}" == "production" ] && [ -z "${SECRET_KEY_BASE}" ] && [ -z "${RAILS_MASTER_KEY}" ]; then
+  echo "ERROR: Missing SECRET_KEY_BASE or RAILS_MASTER_KEY for production environment" >&2
+  echo "Set SECRET_KEY_BASE: docker run -e SECRET_KEY_BASE=\$(bin/rails secret) ..." >&2
+  echo "Or set RAILS_MASTER_KEY: docker run -e RAILS_MASTER_KEY=<master-key> ..." >&2
+  exit 1
+fi
+
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   ./bin/rails db:prepare

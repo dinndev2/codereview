@@ -2,7 +2,14 @@
 
 # This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
 # docker build -t my-app .
-# docker run -d -p 80:80 -p 443:443 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
+# 
+# To run, you MUST provide either:
+# Option 1: RAILS_MASTER_KEY (to decrypt credentials.yml.enc)
+#   docker run -d -p 3000:3000 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
+# Option 2: SECRET_KEY_BASE (direct secret key)
+#   docker run -d -p 3000:3000 --name my-app -e SECRET_KEY_BASE=<generated-secret-key> my-app
+# 
+# Generate SECRET_KEY_BASE with: bin/rails secret
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=3.2.2
