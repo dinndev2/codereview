@@ -1,0 +1,34 @@
+<%= turbo_stream_from "pull_request_#{pr.id}" %>
+
+<turbo-frame id="pull_request_<%= pr.id %>">
+  <div class="bg-white rounded-lg my-2 sm:m-2 shadow-md p-4 sm:p-6 border border-gray-200">  
+    <div class="mb-4">
+      <h2 class="text-lg sm:text-xl font-semibold mb-1 sm:mb-2 break-words">
+        <%= link_to pr.link, pull_request_path(pr), class: "text-blue-600 hover:text-blue-800 break-all", data: { turbo_frame: "_top" } %>
+      </h2>
+      <p class="text-xs sm:text-sm text-gray-500">
+        Created: <%= pr.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+      </p>
+    </div>
+
+    <% if pr.comment.present? %>
+      <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
+        <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-gray-800">AI Review Comments</h3>
+        <div class="bg-gray-50 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4 border border-gray-100">
+          <div class="prose prose-sm max-w-none markdown-content text-sm sm:text-base">
+            <%= render_markdown(pr.comment.content) %>
+          </div>
+          <p class="text-xs text-gray-400 mt-2 sm:mt-3">
+            Review generated: <%= pr.comment.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+          </p>
+        </div>
+      </div>
+    <% else %>
+      <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200 flex gap-3 items-center justify-center">
+        <p class="text-sm sm:text-base text-gray-500 italic">Review in progress...
+        </p>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" viewBox="0 0 200 200"><circle fill="#155DFB" stroke="#155DFB" stroke-width="15" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="2" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin="0"></animate></circle><circle fill="#155DFB" stroke="#155DFB" stroke-width="15" opacity=".8" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="2" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin="0.05"></animate></circle><circle fill="#155DFB" stroke="#155DFB" stroke-width="15" opacity=".6" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="2" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".1"></animate></circle><circle fill="#155DFB" stroke="#155DFB" stroke-width="15" opacity=".4" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="2" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".15"></animate></circle><circle fill="#155DFB" stroke="#155DFB" stroke-width="15" opacity=".2" r="15" cx="35" cy="100"><animate attributeName="cx" calcMode="spline" dur="2" values="35;165;165;35;35" keySplines="0 .1 .5 1;0 .1 .5 1;0 .1 .5 1;0 .1 .5 1" repeatCount="indefinite" begin=".2"></animate></circle></svg> 
+      </div>
+    <% end %>
+  </div>
+</turbo-frame>

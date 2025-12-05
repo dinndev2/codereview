@@ -1,0 +1,40 @@
+<div class="w-full max-w-4xl mt-10">
+  <div class="mb-6">
+    <a href="<%= pull_requests_path %>" class="text-blue-600 hover:text-blue-800 mb-4 inline-block">
+      ← Back to Pull Requests
+    </a>
+    <h1 class="text-3xl font-bold">Pull Request Review</h1>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 mb-6">
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold mb-2">
+        <a href="<%= @pull_request.link %>" target="_blank" class="text-blue-600 hover:text-blue-800">
+          <%= @pull_request.link %>
+        </a>
+      </h2>
+      <p class="text-sm text-gray-500">
+        Created: <%= @pull_request.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+      </p>
+    </div>
+  </div>
+
+  <% if @pull_request.comment.present? %>
+    <div class="space-y-4">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">AI Review Comments</h2>
+      <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+        <div class="prose prose-sm max-w-none markdown-content">
+          <%= render_markdown(@pull_request.comment.content) %>
+        </div>
+        <p class="text-xs text-gray-400 mt-4 pt-4 border-t border-gray-100">
+          Review generated: <%= @pull_request.comment.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+        </p>
+      </div>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200 text-center">
+      <p class="text-gray-500 italic">Review in progress... Please check back soon.</p>
+    </div>
+  <% end %>
+</div>
+

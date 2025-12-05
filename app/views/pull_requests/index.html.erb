@@ -1,0 +1,34 @@
+<div class="mx-auto w-full max-w-4xl px-4 sm:px-6 mt-6 sm:mt-10 mb-10">  
+  <div class="mb-6 sm:mb-8 p-4 sm:p-6 bg-white rounded-lg shadow-sm">
+    <h1 class="text-2xl sm:text-3xl font-bold">AIAICodeReview</h1>
+    <div class="text-sm sm:text-base text-gray-500 mt-1">Review your public pull requests with AI.</div>
+    <form action="<%= pull_requests_path %>" method="post" class="flex flex-col sm:flex-row gap-2 sm:gap-2 mt-4">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <input 
+        type="text" 
+        name="pull_request[link]" 
+        placeholder="Enter pull request link"
+        class="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+      <button 
+        type="submit"
+        class="w-full sm:w-auto px-4 sm:px-6 py-2 text-sm sm:text-base cursor-pointer bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+      >
+        Review Pull Request
+      </button>
+    </form>
+  </div>
+
+  <div class="space-y-4 sm:space-y-6">
+    <div>  
+      <%= render partial: "pull_request", collection: @pull_requests, as: :pr %>
+    </div>
+    <% if @pull_requests.empty? %>
+      <div class="text-center border-2 rounded-lg border-dashed bg-gray-100 border-gray-300 flex items-center flex-col gap-4 sm:gap-5 py-8 sm:py-12 px-4 text-gray-500">
+        <%= inline_svg_tag "svgs/book.svg", class: "w-8 h-8 sm:w-10 sm:h-10 mx-auto" %>
+        <p class="text-sm sm:text-base">No pull requests yet. Add one above to get started!</p>
+      </div>
+    <% end %>
+  </div>
+  <div class="text-center text-xs sm:text-sm text-gray-500 mt-4 sm:mt-5 px-2">Powered by Gemini API. model: gemini-2.5-flash</div>
+</div>
