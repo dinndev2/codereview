@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
+  # Redirect favicon.ico to icon.png (browsers automatically request favicon.ico)
+  get "favicon.ico", to: redirect("/icon.png", status: 301)
 
   # Defines the root path route ("/")
   # root "posts#index"
