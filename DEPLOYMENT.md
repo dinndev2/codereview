@@ -84,16 +84,25 @@ Or in Heroku Dashboard:
 
 ### Railway
 
-Railway automatically provides `DATABASE_URL` when you add a PostgreSQL service. You only need to:
+Railway automatically provides `DATABASE_URL` when you add a PostgreSQL service. You need to:
 
 1. **Add PostgreSQL service** in Railway (if not already added)
    - Go to your project → New → Database → Add PostgreSQL
    - Railway will automatically set `DATABASE_URL` environment variable
 
 2. **Set SECRET_KEY_BASE**:
-   - Go to your project → Variables
+   - Go to your project → Variables (or your Rails service → Variables)
    - Add: `SECRET_KEY_BASE` = `<generated-secret>`
    - Generate secret: `bin/rails secret`
+
+3. **Set Deploy Command** (to create database and run migrations):
+   - Go to your Rails service → Settings → Deploy
+   - Set Deploy Command: `bin/rails db:prepare`
+   - Or leave blank to use the default (docker-entrypoint handles it)
+
+4. **If database doesn't exist**, run migrations manually:
+   - Go to your Rails service → Deployments → Click on a deployment → View Logs
+   - Or use Railway CLI: `railway run bin/rails db:create db:migrate`
 
 **Note**: Railway automatically sets `DATABASE_URL`, so you don't need to configure individual database variables (DATABASE_HOST, DATABASE_USER, etc.). The app will use `DATABASE_URL` automatically.
 
