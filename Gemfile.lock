@@ -129,6 +129,8 @@ GEM
       logger
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
+    faraday-retry (2.3.2)
+      faraday (~> 2.0)
     faraday-typhoeus (1.1.0)
       faraday (~> 2.0)
       typhoeus (~> 1.4)
@@ -445,6 +447,7 @@ DEPENDENCIES
   debug
   delayed_job_active_record
   dotenv-rails
+  faraday-retry
   gemini-ai (~> 4.2)
   importmap-rails
   inline_svg

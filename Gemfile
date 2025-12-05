@@ -44,6 +44,7 @@ gem "jwt"             # For GitHub App authentication
 gem "openssl"         # Already included in Rails usually
 gem "redcarpet"       # Markdown rendering
 gem "inline_svg"
+gem "faraday-retry"   # Required for Faraday v2.0+ retry middleware (used by octokit/gemini-ai)
 
 
 
