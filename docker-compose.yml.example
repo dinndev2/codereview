@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: aiaicodereview_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   web:
     build: .
     ports:
@@ -11,13 +27,26 @@ services:
       # OR use RAILS_MASTER_KEY instead:
       # RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       
+      # Database configuration (PostgreSQL)
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: aiaicodereview_production
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      
+      # Or use DATABASE_URL instead:
+      # DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-changeme}@db:5432/aiaicodereview_production
+      
       # Other environment variables
       RAILS_ENV: production
       RAILS_LOG_TO_STDOUT: "true"
-    volumes:
-      # IMPORTANT: Mount storage directory for SQLite database persistence
-      - ./storage:/rails/storage
-    # Uncomment if using PostgreSQL/MySQL instead of SQLite
-    # depends_on:
-    #   - db
+    depends_on:
+      db:
+        condition: service_healthy
+    # Remove storage volume if not using SQLite
+    # volumes:
+    #   - ./storage:/rails/storage
+
+volumes:
+  postgres_data:
 

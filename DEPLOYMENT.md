@@ -1,16 +1,27 @@
 # Deployment Guide
 
-## Important Notes
+## Database Configuration
 
-### SQLite Database in Production
-⚠️ **Warning**: SQLite is configured for production, but it requires persistent storage. If deploying with Docker, make sure to mount a volume for the `storage/` directory, otherwise your database will be lost when the container restarts.
+This application uses:
+- **SQLite** for development and test environments
+- **PostgreSQL** for production
 
-For Docker:
+### PostgreSQL Configuration
+
+Set these environment variables for production:
+
 ```bash
-docker run -v /path/to/persistent/storage:/rails/storage ...
+DATABASE_HOST=localhost          # or your PostgreSQL host
+DATABASE_PORT=5432              # PostgreSQL port
+DATABASE_NAME=aiaicodereview_production
+DATABASE_USER=postgres          # your PostgreSQL username
+DATABASE_PASSWORD=your_password # your PostgreSQL password
 ```
 
-For production, consider using PostgreSQL or MySQL instead of SQLite.
+Or use `DATABASE_URL` format:
+```bash
+DATABASE_URL=postgresql://user:password@host:5432/database_name
+```
 
 ---
 
@@ -29,26 +40,31 @@ Then set it as an environment variable in your deployment platform.
 
 ### Docker / Docker Compose
 
-**Option 1: Environment variable in docker run**
+**Option 1: Environment variable in docker run (with external PostgreSQL)**
 ```bash
 docker run -d -p 3000:3000 \
   -e SECRET_KEY_BASE=$(bin/rails secret) \
+  -e DATABASE_HOST=your-postgres-host \
+  -e DATABASE_NAME=aiaicodereview_production \
+  -e DATABASE_USER=postgres \
+  -e DATABASE_PASSWORD=your-password \
   --name my-app my-app
 ```
 
-**Option 2: Use docker-compose.yml**
-Create `docker-compose.yml`:
-```yaml
-version: '3.8'
-services:
-  web:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      RAILS_ENV: production
+**Option 2: Use docker-compose.yml (includes PostgreSQL service)**
+Copy `docker-compose.yml.example` to `docker-compose.yml`:
+```bash
+cp docker-compose.yml.example docker-compose.yml
 ```
+
+Then set your secrets:
+```bash
+export SECRET_KEY_BASE=$(bin/rails secret)
+export POSTGRES_PASSWORD=your-secure-password
+docker-compose up -d
+```
+
+The docker-compose.yml includes a PostgreSQL service that will be automatically set up.
 
 Then run:
 ```bash
