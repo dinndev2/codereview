@@ -84,8 +84,18 @@ Or in Heroku Dashboard:
 
 ### Railway
 
-1. Go to your project → Variables
-2. Add: `SECRET_KEY_BASE` = `<generated-secret>`
+Railway automatically provides `DATABASE_URL` when you add a PostgreSQL service. You only need to:
+
+1. **Add PostgreSQL service** in Railway (if not already added)
+   - Go to your project → New → Database → Add PostgreSQL
+   - Railway will automatically set `DATABASE_URL` environment variable
+
+2. **Set SECRET_KEY_BASE**:
+   - Go to your project → Variables
+   - Add: `SECRET_KEY_BASE` = `<generated-secret>`
+   - Generate secret: `bin/rails secret`
+
+**Note**: Railway automatically sets `DATABASE_URL`, so you don't need to configure individual database variables (DATABASE_HOST, DATABASE_USER, etc.). The app will use `DATABASE_URL` automatically.
 
 ### Render
 
