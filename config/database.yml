@@ -28,5 +28,13 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  <<: *default
-  # database: path/to/persistent/storage/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # Railway automatically sets DATABASE_URL - Rails will use it if present
+  # Otherwise, use individual environment variables as fallback
+  host: <%= ENV.fetch("DATABASE_HOST") { "localhost" } %>
+  port: <%= ENV.fetch("DATABASE_PORT") { 5432 } %>
+  database: <%= ENV.fetch("DATABASE_NAME") { "aiaicodereview_production" } %>
+  username: <%= ENV.fetch("DATABASE_USER") { "postgres" } %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
